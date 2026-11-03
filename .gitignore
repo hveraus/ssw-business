@@ -1,7 +1,7 @@
 .DS_Store
 .workbuddy/
 .slidep/
-*.bak
+*.bak*
 
 # 客户资料与别家客户项目，不进本仓库
 客户/
