@@ -37,6 +37,9 @@ def vlen(t):
     return n
 
 
+LINK_QUEUE = []          # [(shape, 目标页码)]，构建完成后统一解析
+
+
 def rect(s, l, t, w, h, fill=None, line=None, lw=0.75):
     sh = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Pt(l), Pt(t), Pt(w), Pt(h))
     sh.shadow.inherit = False
@@ -196,16 +199,17 @@ def p01(s):
     txt(s, 62, 214, 410, 40,
         [P("将 AI 接入企业数据与业务流程，交付可持续运行的系统", 11, False, MID, ls=1.3)])
     rect(s, 475, 133, 1, 196, fill=BORDER)
-    nav = [("01", "时代背景与公司", "P03–P09"), ("02", "客户案例", "P10–P29"),
-           ("03", "AI 中台设施", "P30–P33"), ("04", "我们的服务", "P34–P41"),
-           ("05", "AI 平台落地", "P42–P50"), ("06", "如何落地", "P51–P54"),
-           ("07", "合作模式", "P55–P58"), ("08", "数据安全", "P59")]
-    for i, (num, name, rng) in enumerate(nav):
+    nav = [("01", "时代背景与公司", "P03–P09", 3), ("02", "客户案例", "P10–P29", 10),
+           ("03", "AI 中台设施", "P30–P33", 30), ("04", "我们的服务", "P34–P41", 34),
+           ("05", "AI 平台落地", "P42–P50", 42), ("06", "如何落地", "P51–P54", 51),
+           ("07", "合作模式", "P55–P58", 55), ("08", "数据安全", "P59", 59)]
+    for i, (num, name, rng, tgt) in enumerate(nav):
         yy = 132 + i * 24
-        txt(s, 491, yy, 140, 22,
-            [R([(num + "　", False, LIGHT), (name, True, DARK)], 10.5)], anchor="m")
-        txt(s, 631, yy, 60, 22, [P(rng, 8.5, False, LIGHT, align="r")],
-            anchor="m", align="r")
+        _a = txt(s, 491, yy, 140, 22,
+                 [R([(num + "　", False, LIGHT), (name, True, DARK)], 10.5)], anchor="m")
+        _b = txt(s, 631, yy, 60, 22, [P(rng, 8.5, False, LIGHT, align="r")],
+                 anchor="m", align="r")
+        LINK_QUEUE.extend([(_a, tgt), (_b, tgt)])
     txt(s, 36, 383, 648, 14, [P("01", 7.5, False, LIGHT)], align="r")
 
 
@@ -703,7 +707,7 @@ def p21(s):
     txt(s, 458, 124, 212, 16, [P("项目一览", 9, True, RED)])
     y = 144
     for k, v in [("行业", "化工 · 配方与工艺"), ("项目类型", "知识库建设 + 研发辅助"),
-                 ("服务性质", "知识库 + 研发问答入口"), ("一期投入", "40 人天 · 周期 12 个月")]:
+                 ("服务性质", "知识库 + 研发问答入口"), ("一期投入", "40 人天 · 周期 2 个月")]:
         txt(s, 458, y, 212, 10, [P(k, 7, False, LIGHT)])
         txt(s, 458, y + 10, 212, 16, [P(v, 8.5, True, DARK, ls=1.05)])
         y += 29
@@ -1932,29 +1936,33 @@ def nav(s):
     rect(s, 36, 87, 40, 3, fill=RED)
     txt(s, 85, 80, 576, 17, [P("点击章节或案例标签，即可跳转；后续页码均对应本版本", 9, False, MID)])
     secs = [
-        ("01", "时代背景与公司", "企业痛点 · SSW 能力", "P03–09"),
-        ("02", "客户案例", "五个行业的交付成果", "P10–29"),
-        ("03", "AI 中台设施", "账号 · 数据 · 成本", "P30–33"),
-        ("04", "我们的服务", "知识库 · 智能体 · 集成", "P34–41"),
-        ("05", "国内外 AI 平台", "选型 · 落地 · 合规", "P42–50"),
-        ("06", "如何落地", "实施六步 · 周期与投入", "P51–54"),
-        ("07", "合作模式", "适用客户 · 合作阶段", "P55–58"),
-        ("08", "数据安全", "权限 · 脱敏 · 留痕", "P59"),
+        ("01", "时代背景与公司", "企业痛点 · SSW 能力", "P03–09", 3),
+        ("02", "客户案例", "五个行业的交付成果", "P10–29", 10),
+        ("03", "AI 中台设施", "账号 · 数据 · 成本", "P30–33", 30),
+        ("04", "我们的服务", "知识库 · 智能体 · 集成", "P34–41", 34),
+        ("05", "国内外 AI 平台", "选型 · 落地 · 合规", "P42–50", 42),
+        ("06", "如何落地", "实施六步 · 周期与投入", "P51–54", 51),
+        ("07", "合作模式", "适用客户 · 合作阶段", "P55–58", 55),
+        ("08", "数据安全", "权限 · 脱敏 · 留痕", "P59", 59),
     ]
-    for i, (num, name, desc, rng) in enumerate(secs):
+    for i, (num, name, desc, rng, tgt) in enumerate(secs):
         x = 36 + (i % 4) * 165.6
         y = 114 + (i // 4) * 100
-        rect(s, x, y, 153, 86, fill=CARD, line=BORDER)
-        rect(s, x, y, 3.5, 86, fill=RED)
-        txt(s, x + 12, y + 9, 30, 22, [P(num, 15, True, RED)])
-        txt(s, x + 12, y + 32, 131, 22, [P(name, 11, True, DARK)])
-        txt(s, x + 12, y + 56, 131, 16, [P(desc, 8, False, MID)])
-        txt(s, x + 98, y + 8, 43, 17, [P(rng, 8.5, False, LIGHT, align="r")], align="r")
+        _card = rect(s, x, y, 153, 86, fill=CARD, line=BORDER)
+        _bar = rect(s, x, y, 3.5, 86, fill=RED)
+        _t1 = txt(s, x + 12, y + 9, 30, 22, [P(num, 15, True, RED)])
+        _t2 = txt(s, x + 12, y + 32, 131, 22, [P(name, 11, True, DARK)])
+        _t3 = txt(s, x + 12, y + 56, 131, 16, [P(desc, 8, False, MID)])
+        _t4 = txt(s, x + 98, y + 8, 43, 17, [P(rng, 8.5, False, LIGHT, align="r")], align="r")
+        LINK_QUEUE.extend([(_card, tgt), (_bar, tgt), (_t1, tgt), (_t2, tgt), (_t3, tgt), (_t4, tgt)])
     txt(s, 36, 324, 106, 17, [P("案例快速跳转", 10, True, RED)])
-    for i, c in enumerate(["化工 · 知识库", "外贸 · 产品库", "金融 · 合规", "供应链 · 销售", "高校 · 科研"]):
+    _cases = [("化工 · 知识库", 12), ("外贸 · 产品库", 15), ("金融 · 合规", 19),
+              ("供应链 · 销售", 23), ("高校 · 科研", 26)]
+    for i, (c, tgt) in enumerate(_cases):
         x = 136.8 + i * 109.5
-        rect(s, x, 320, 102, 25, fill=WHITE, line=BORDER)
-        txt(s, x, 320, 102, 25, [P(c, 9, True, DARK, align="c")], anchor="m", align="c")
+        _r = rect(s, x, 320, 102, 25, fill=WHITE, line=BORDER)
+        _t = txt(s, x, 320, 102, 25, [P(c, 9, True, DARK, align="c")], anchor="m", align="c")
+        LINK_QUEUE.extend([(_r, tgt), (_t, tgt)])
 
 
 def ov1(s):
@@ -2088,6 +2096,12 @@ CASE_CHROME = {11: None,
 for _i, _sl in enumerate(prs.slides, 1):
     if _i in CASE_CHROME:
         case_chrome(_sl, CASE_CHROME[_i])
+
+# 目录 / 阅读导航的真超链接（必须等全部页面建完再解析）
+for _sh, _tgt in LINK_QUEUE:
+    _n = len(prs.slides._sldIdLst)
+    if 1 <= _tgt <= _n:
+        _sh.click_action.target_slide = prs.slides[_tgt - 1]
 
 prs.save(OUT)
 print("slides:", len(prs.slides.__iter__.__self__._sldIdLst))
