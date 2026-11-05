@@ -9,7 +9,7 @@ from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.enum.shapes import MSO_SHAPE
 from pptx.oxml.ns import qn
 
-OUT = "/Users/Ken/WorkBuddy/SSW 商务/SSW AI 业务_v2/SSW AI 业务_v3.pptx"
+OUT = "/Users/Ken/WorkBuddy/SSW 商务/SSW AI 业务_v2/SSW AI 业务_v7.pptx"
 ASSETS = "/Users/Ken/WorkBuddy/SSW 商务/SSW AI 业务_v2/assets"
 
 W, H = 720.0, 405.0
