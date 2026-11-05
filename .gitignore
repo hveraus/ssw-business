@@ -2,6 +2,7 @@
 .workbuddy/
 .slidep/
 _pg/
+_v/
 *.bak*
 
 # 客户资料与别家客户项目，不进本仓库
