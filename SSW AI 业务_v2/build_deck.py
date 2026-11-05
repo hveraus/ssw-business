@@ -15,6 +15,7 @@ ASSETS = "/Users/Ken/WorkBuddy/SSW 商务/SSW AI 业务_v2/assets"
 W, H = 720.0, 405.0
 RED = "CC4141"; DARK = "333333"; MID = "797979"; LIGHT = "AAAAAA"
 CARD = "F7F7F8"; BORDER = "E3E3E6"; WHITE = "FFFFFF"; TINT = "FBEFEF"
+DOT = "B5B9BE"
 FONT = "Microsoft YaHei"
 FOOTER_TEXT = "SSW AI 业务 · 企业 AI 转型"
 
@@ -78,10 +79,21 @@ def txt(s, l, t, w, h, paras, anchor="t", align="l", ls=1.12):
         para.space_after = Pt(p.get("sa", 0))
         if "runs" in p:
             for rt, rsz, rb, rc in p["runs"]:
-                r = para.add_run(); r.text = rt; _rpr(r, rsz, rb, rc)
+                for k, part in enumerate(rt.split("\n")):
+                    if k:
+                        r = para.add_run(); r.text = part; _rpr(r, rsz, rb, rc)
+                        r._r.addprevious(para._p.makeelement(qn("a:br"), {}))
+                    elif part:
+                        r = para.add_run(); r.text = part; _rpr(r, rsz, rb, rc)
         else:
-            r = para.add_run(); r.text = p["text"]
-            _rpr(r, p.get("size", 9), p.get("bold", False), p.get("color", DARK))
+            for k, part in enumerate(p["text"].split("\n")):
+                if k:
+                    r = para.add_run(); r.text = part
+                    _rpr(r, p.get("size", 9), p.get("bold", False), p.get("color", DARK))
+                    r._r.addprevious(para._p.makeelement(qn("a:br"), {}))
+                elif part:
+                    r = para.add_run(); r.text = part
+                    _rpr(r, p.get("size", 9), p.get("bold", False), p.get("color", DARK))
     return tb
 
 
@@ -98,6 +110,17 @@ def R(runs, size=9, align=None, sa=0, ls=1.12):
 
 
 # ---------------------------------------------------------------- page chrome
+def case_chrome(s, cur=None):
+    """案例段标识：左侧贯穿红条（案例首页更粗）+ 页脚 01–05 案例导航点。cur=当前案例序号(1-5)。"""
+    rect(s, 0, 4.3, 10.44 if cur else 5.4, 371.5, fill=RED)
+    if cur:
+        rect(s, 0, 0, W, 6.84, fill=RED)
+        for i in range(5):
+            txt(s, 313 + i * 28, 383, 20, 14,
+                [P("%02d" % (i + 1), 7, i == cur - 1, RED if i == cur - 1 else DOT)],
+                anchor="m")
+
+
 def base(s, bg=WHITE, topbar=True, footer=True, page=None):
     rect(s, 0, 0, W, H, fill=bg, line=bg)
     if topbar:
@@ -2054,6 +2077,17 @@ BUILDERS = [p01, nav, d1, era, ice, p02, p03, p04, p05,
 
 for fn in BUILDERS:
     fn(prs.slides.add_slide(BLANK))
+
+# 案例段（P11 案例简介 + P12–P29 五个案例）左侧红条与页脚导航点
+CASE_CHROME = {11: None,
+               12: 1, 13: 1, 14: 1,
+               15: 2, 16: 2, 17: 2, 18: 2,
+               19: 3, 20: 3, 21: 3, 22: 3,
+               23: 4, 24: 4, 25: 4,
+               26: 5, 27: 5, 28: 5, 29: 5}
+for _i, _sl in enumerate(prs.slides, 1):
+    if _i in CASE_CHROME:
+        case_chrome(_sl, CASE_CHROME[_i])
 
 prs.save(OUT)
 print("slides:", len(prs.slides.__iter__.__self__._sldIdLst))
