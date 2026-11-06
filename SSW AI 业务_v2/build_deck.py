@@ -1225,34 +1225,32 @@ def p28(s):
 
 
 def p29(s):
-    """正文结束页：满版红底，谢谢 + CTA + 联系我们。后面两页是附录。"""
-    base(s, bg=RED, topbar=False, footer=False)
-    W8, W6 = "FFE8E8", "FFD5D5"          # 红底上的次级白
-    txt(s, 36, 34, 300, 16, [P("SSW AI 业务", 9, False, W8)])
-    txt(s, 36, 62, 420, 62, [P("谢谢", 46, True, WHITE)])
-    txt(s, 36, 132, 420, 26, [P("你最想把哪项工作交给 AI？", 15, False, W8)])
-    rect(s, 36, 178, 420, 1, fill=W6)
-    txt(s, 36, 196, 400, 30, [P("预约一次 60 分钟的沟通", 18, True, WHITE)])
-    txt(s, 36, 232, 400, 38, [P(
+    """正文结束页：浅灰底，红色只做块状点缀（CTA 红块 + 白卡红顶条）。后面两页是附录。"""
+    base(s, bg="E9E9EC", page="60")
+    W8 = "FFE8E8"                        # 红块上的次级白
+    txt(s, 36, 34, 300, 16, [P("SSW AI 业务", 9, False, MID)])
+    txt(s, 36, 60, 420, 64, [P("谢谢", 48, True, DARK)])
+    txt(s, 36, 132, 420, 24, [P("你最想把哪项工作交给 AI？", 14, False, MID)])
+    # CTA：一块红，白字
+    rect(s, 36, 176, 420, 96, fill=RED)
+    txt(s, 52, 192, 388, 30, [P("预约一次 60 分钟的沟通", 17, True, WHITE)])
+    txt(s, 52, 228, 388, 36, [P(
         "聊一条最想改善的业务流程，我们一起判断第一个场景值不值得做。",
-        9.5, False, W8, ls=1.3)])
-    txt(s, 36, 276, 400, 34, [P(
-        "带上三样就够：一个真实的业务问题 · 一份典型业务资料 · 一位业务负责人",
         9, False, W8, ls=1.3)])
+    txt(s, 36, 296, 420, 34, [P(
+        "带上三样就够：一个真实的业务问题 · 一份典型业务资料 · 一位业务负责人",
+        9, False, MID, ls=1.3)])
     # 右侧白卡：联系我们
-    rect(s, 470, 130, 214, 200, fill=WHITE)
-    txt(s, 486, 146, 182, 16, [P("联系我们", 9, True, RED)])
-    rect(s, 486, 168, 182, 1, fill=BORDER)
-    txt(s, 486, 180, 182, 24, [P("www.ssw.cn", 13, True, DARK)])
-    txt(s, 486, 206, 182, 24, [P("+86 571 8517 8910", 13, True, DARK)])
-    rect(s, 486, 238, 182, 1, fill=BORDER)
-    txt(s, 486, 248, 182, 66, [P(
+    rect(s, 470, 136, 214, 190, fill=WHITE, line=BORDER)
+    rect(s, 470, 136, 214, 3, fill=RED)
+    txt(s, 486, 152, 182, 16, [P("联系我们", 9, True, RED)])
+    rect(s, 486, 172, 182, 1, fill=BORDER)
+    txt(s, 486, 184, 182, 24, [P("www.ssw.cn", 13, True, DARK)])
+    txt(s, 486, 210, 182, 24, [P("+86 571 8517 8910", 13, True, DARK)])
+    rect(s, 486, 240, 182, 1, fill=BORDER)
+    txt(s, 486, 250, 182, 66, [P(
         "正式诊断、项目范围与费用另行确认。技术细节见后两页附录。",
         7.5, False, MID, ls=1.32)])
-    # 深色页脚
-    rect(s, 36, 379, 648, 1, fill=W6)
-    txt(s, 36, 383, 400, 14, [P(FOOTER_TEXT, 7.5, False, W6)])
-    txt(s, 570, 383, 114, 14, [P("60", 7.5, False, W6, align="c")], align="c")
 def a01(s):
     base(s, page="A1")
     header(s, "附录一　术语对照", "同一个东西，两套说法", "给 IT 同事的对照页")
