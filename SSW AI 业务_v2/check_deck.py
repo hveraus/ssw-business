@@ -62,13 +62,10 @@ def check_pageno(prs):
             if (sh.top / EMU > 378 and sh.width / EMU >= 100
                     and 1 <= len(t) <= 4 and not t.startswith('SSW')):
                 foot = t
-        if i <= total - 2:                    # 正文页
-            if foot != '%02d' % i:
-                bad.append((i, foot, '%02d' % i))
-        else:                                 # 附录页
-            want = 'A%d' % (i - (total - 2))
-            if foot != want:
-                bad.append((i, foot, want))
+        # 倒数第三、第二页为附录，最后一页为结束页。
+        want = {total - 2: 'A1', total - 1: 'A2'}.get(i, '%02d' % i)
+        if foot != want:
+            bad.append((i, foot, want))
     return bad
 
 
