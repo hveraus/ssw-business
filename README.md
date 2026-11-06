@@ -8,7 +8,7 @@ SSW（智鹏瑞尔软件）企业 AI 转型业务材料。
 
 | 路径 | 说明 |
 |---|---|
-| `SSW AI 业务_v2/SSW AI 业务_v7.pptx` | **当前版本**（62 页）对外提案，由脚本生成 |
+| `SSW AI 业务_v2/SSW AI 业务_v3.pptx` | **当前版本**（62 页）对外提案，由脚本生成 |
 | `SSW AI 业务_v2/build_deck.py` | deck 的**唯一源头**——所有改动走脚本 |
 | `SSW AI 业务_v2/check_deck.py` | 产出校验器（页码 / 版面 / 换行编码），提交前必须跑 |
 | `SSW AI 业务_v2/assets/` | 图片资产（世界地图、冰山、界面截图） |
@@ -18,7 +18,7 @@ SSW（智鹏瑞尔软件）企业 AI 转型业务材料。
 
 ```bash
 cd "SSW AI 业务_v2"
-python3 build_deck.py     # 生成 SSW AI 业务_v7.pptx
+python3 build_deck.py     # 生成 SSW AI 业务_v3.pptx
 python3 check_deck.py     # 必须全绿（退出码 0）才能提交
 ```
 

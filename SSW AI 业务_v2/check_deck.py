@@ -14,7 +14,7 @@ import zipfile
 from pptx import Presentation
 
 EMU = 12700.0
-DECK = "SSW AI 业务_v7.pptx"
+DECK = "SSW AI 业务_v3.pptx"
 FOOTER_LINE_Y = 379.0   # 页脚横线的 y 坐标（pt）
 PAGE_H = 405.0
 

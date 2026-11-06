@@ -10,7 +10,7 @@
 
 ### 铁律：`build_deck.py` 是唯一源头
 
-**永远不要手工改 `SSW AI 业务_v7.pptx`。** 所有文案、版式、结构改动都改 `build_deck.py`，然后重新生成。
+**永远不要手工改 `SSW AI 业务_v3.pptx`。** 所有文案、版式、结构改动都改 `build_deck.py`，然后重新生成。
 手工改的那部分，下一次 `python3 build_deck.py` 就会被覆盖掉——这个仓库历史上已经因此产生过版本分叉（v2 / v3 分叉事件）。
 
 `assets/` 里的图片是资产，可以直接替换，但要同步改脚本里的引用。
@@ -30,7 +30,7 @@ cd "SSW AI 业务_v2"
 ```
 
 - 依赖：`python-pptx`（上面那个 venv 已装）
-- 输出：`SSW AI 业务_v7.pptx`
+- 输出：`SSW AI 业务_v3.pptx`
 - 校验器有退出码：0 通过 / 1 有问题，可以直接用在 CI 或 pre-commit 里
 
 **不要**用 LibreOffice / PowerPoint 转存来代替构建——那会破坏脚本与产物的对应关系。
@@ -199,7 +199,7 @@ ORDER = [("p01", "01"), ("nav", "02"), ...]
 
 ```bash
 /Users/Ken/.workbuddy/binaries/node/versions/22.22.2-6/bin/slidep screenshot \
-  "SSW AI 业务_v7.pptx" --page-index 39 --out /tmp/p40.png
+  "SSW AI 业务_v3.pptx" --page-index 39 --out /tmp/p40.png
 ```
 
 `--page-index` 是 **0 基**（第 40 页 = index 39）。渲染图在 `/tmp`，别留在仓库里（`_v/`、`_pg/` 已 gitignore）。
@@ -238,6 +238,7 @@ ORDER = [("p01", "01"), ("nav", "02"), ...]
 
 ## 10. 历史包袱（别被误导）
 
+- **版本号沿革**：曾有一版人工在 PowerPoint 里做的 `V7`（62 页），其内容已完整并入 `build_deck.py`，随后按 Ken 的要求把脚本输出改名为 **`SSW AI 业务_v3.pptx`**。所以"V3"是当前脚本基线，与 git 历史里那个早期的 v3（57 页、已删）不是一回事。
 - 仓库里有 `p15`–`p20`、`sp4` 等**已下架但保留在源码里的函数**，不在 `BUILDERS` 里。它们对应砍掉的涂料/汽车零部件案例，改代码时看到不用管。
 - 案五（`c5a`–`c5c`）是目前唯一没有量化结果的案例，页面上"尚未做量化统计"是**刻意的**，不是漏改。
 - 封面 `p01` 的目录、`nav` 页的章节范围、以及全部超链接目标，**都是硬编码的**，与真实页序没有联动。任何页数变动都要手动同步这三处。
