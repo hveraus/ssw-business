@@ -62,8 +62,22 @@ def check_pageno(prs):
             if (sh.top / EMU > 378 and sh.width / EMU >= 100
                     and 1 <= len(t) <= 4 and not t.startswith('SSW')):
                 foot = t
-        # 倒数第三、第二页为附录，最后一页为结束页。
-        want = {total - 2: 'A1', total - 1: 'A2'}.get(i, '%02d' % i)
+        # 按页眉标签判断：标签以「附录一/二」开头 → A1/A2，其余按物理页序。
+        # 不依赖附录在第几页，挪页也不会失效。
+        tag = ''
+        for sh in s.shapes:
+            if not sh.has_text_frame:
+                continue
+            t = sh.text_frame.text.strip()
+            if sh.top / EMU < 40 and t.startswith('附录'):
+                tag = t
+                break
+        if tag.startswith('附录一'):
+            want = 'A1'
+        elif tag.startswith('附录二'):
+            want = 'A2'
+        else:
+            want = '%02d' % i
         if foot != want:
             bad.append((i, foot, want))
     return bad
