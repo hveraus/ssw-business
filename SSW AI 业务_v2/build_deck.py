@@ -180,18 +180,6 @@ def bullet_list(s, l, t, w, items, gap_y=24, size=8.5, color=DARK, dash=True, ma
 
 
 
-def three_cols(s, heads, cols, y=116, h=222, hl_first=True, card3_fill=CARD,
-               count_rows=None, row_labels=None, sub_groups=None):
-    xs = [36, 257, 478]
-    for i in range(3):
-        fill = card3_fill if i == 2 else WHITE
-        rect(s, xs[i], y, 206, h, fill=fill, line=BORDER)
-        if hl_first and i == 2:
-            rect(s, xs[i], y, 206, 3, fill=RED)
-        card_head(s, xs[i] + 14, y + 12, 178, heads[i], RED if i != 0 else MID, 9.5)
-    return xs
-
-
 # ================================================================ page builders
 def p01(s):
     base(s, bg=CARD, topbar=False, footer=False)
@@ -2017,9 +2005,11 @@ def ov2(s):
          "企业版默认不用业务数据训练模型，以条款约定为准",
          "查询留痕：出了事能查到是谁传的、传了什么"],
     ]
-    xs = three_cols(s, heads, cols, y=116, h=200)
-    for i in range(3):
-        bullet_list(s, xs[i] + 14, 158, 178, cols[i], gap_y=52, size=8.5, color=DARK)
+    for x, heading, items in zip((36, 257, 478), heads, cols):
+        rect(s, x, 116, 206, 200, fill=CARD, line=BORDER)
+        rect(s, x, 116, 206, 3, fill=RED)
+        card_head(s, x + 14, 128, 178, heading, RED, 9.5)
+        bullet_list(s, x + 14, 158, 178, items, gap_y=52, size=8.5, color=DARK)
     txt(s, 36, 330, 648, 20,
         [P("三关都过了，才叫「在国内正常使用」，这也是我们收费的地方。", 9.5, True, RED)])
     txt(s, 36, 354, 648, 16,
