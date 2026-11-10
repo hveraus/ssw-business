@@ -39,6 +39,9 @@ def vlen(t):
     return n
 
 
+CASE_LINKS = (("化工 · 知识库", 12), ("外贸 · 产品库", 15), ("金融 · 合规", 19),
+              ("供应链 · 销售", 23), ("高校 · 科研", 26))
+
 LINK_QUEUE = []          # [(shape, 目标页码)]，构建完成后统一解析
 
 
@@ -55,6 +58,11 @@ def rect(s, l, t, w, h, fill=None, line=None, lw=0.75):
         sh.line.fill.background()
     sh.text_frame.text = ""
     return sh
+
+
+def link_shapes_since(s, start, target):
+    # 将链接直接绑定到可见的底板、文字和装饰，使每一层都能响应点击。
+    LINK_QUEUE.extend((s.shapes[i], target) for i in range(start, len(s.shapes)))
 
 
 def _rpr(run, size, bold, color, font=FONT):
@@ -196,11 +204,14 @@ def p01(s):
            ("07", "合作模式", "P53–P56", 53), ("08", "数据安全", "P57", 57)]
     for i, (num, name, rng, tgt) in enumerate(nav):
         yy = 132 + i * 24
-        _a = txt(s, 491, yy, 140, 22,
+        first = len(s.shapes)
+        row = rect(s, 491, yy, 200, 24, fill=CARD)
+        row._element.xpath("./p:style/a:effectRef")[0].set("idx", "0")
+        txt(s, 491, yy, 140, 22,
                  [R([(num + "　", False, LIGHT), (name, True, DARK)], 10.5)], anchor="m")
-        _b = txt(s, 631, yy, 60, 22, [P(rng, 8.5, False, LIGHT, align="r")],
+        txt(s, 631, yy, 60, 22, [P(rng, 8.5, False, LIGHT, align="r")],
                  anchor="m", align="r")
-        LINK_QUEUE.extend([(_a, tgt), (_b, tgt)])
+        link_shapes_since(s, first, tgt)
     txt(s, 36, 383, 648, 14, [P("01", 7.5, False, LIGHT)], align="r")
 
 
@@ -258,7 +269,7 @@ def p04(s):
     stats = [("30+ 年", "企业软件交付经验，从桌面软件、网站、云一路做到 AI"),
              ("100+", "专业顾问，分布澳大利亚 4 城市 + 中国 + 欧洲"),
              ("6 个", "办公室 · 3 国 · 3 大洲，交付由杭州团队执行"),
-             ("0转包", "所有交付都由自己的团队完成，中间不经第三方")]
+             ("0 转包", "所有交付都由自己的团队完成，中间不经第三方")]
     for i, (num, lab) in enumerate(stats):
         cx = 36 + (i % 2) * 331
         cy = 114 + (i // 2) * 72
@@ -313,6 +324,7 @@ def p06(s):
     ]
     for i, (tag, name, pain, value, label) in enumerate(cards):
         x = 36 + i * 131
+        first = len(s.shapes)
         rect(s, x, 122, 124, 200, fill=CARD, line=BORDER)
         rect(s, x, 122, 124, 3, fill=RED)
         pw = min(104, max(56, 10 + 7.2 * vlen(tag)))
@@ -323,6 +335,7 @@ def p06(s):
         rect(s, x + 10, 255, 104, 1, fill=BORDER)
         txt(s, x + 10, 263, 104, 25, [P(value, 15, True, RED)], anchor="m")
         txt(s, x + 10, 293, 104, 23, [P(label, 8.5, True, DARK)])
+        link_shapes_since(s, first, CASE_LINKS[i][1])
     txt(s, 36, 332, 648, 18,
         [P("每个案例都按「痛点 → 我们做了什么 → 结果」展开。", 8.5, False, MID)])
 
@@ -1950,9 +1963,7 @@ def nav(s):
         _t4 = txt(s, x + 98, y + 8, 43, 17, [P(rng, 8.5, False, LIGHT, align="r")], align="r")
         LINK_QUEUE.extend([(_card, tgt), (_bar, tgt), (_t1, tgt), (_t2, tgt), (_t3, tgt), (_t4, tgt)])
     txt(s, 36, 324, 106, 17, [P("案例快速跳转", 10, True, RED)])
-    _cases = [("化工 · 知识库", 12), ("外贸 · 产品库", 15), ("金融 · 合规", 19),
-              ("供应链 · 销售", 23), ("高校 · 科研", 26)]
-    for i, (c, tgt) in enumerate(_cases):
+    for i, (c, tgt) in enumerate(CASE_LINKS):
         x = 136.8 + i * 109.5
         _r = rect(s, x, 320, 102, 25, fill=WHITE, line=BORDER)
         _t = txt(s, x, 320, 102, 25, [P(c, 9, True, DARK, align="c")], anchor="m", align="c")
@@ -2073,6 +2084,7 @@ for _sh, _tgt in LINK_QUEUE:
     _n = len(prs.slides._sldIdLst)
     if 1 <= _tgt <= _n:
         _sh.click_action.target_slide = prs.slides[_tgt - 1]
+        _sh._element.xpath("./p:nvSpPr/p:cNvPr/a:hlinkClick")[0].set("tooltip", f"单击跳转至第 {_tgt} 页")
 
 prs.save(OUT)
 print("slides:", len(prs.slides.__iter__.__self__._sldIdLst))
