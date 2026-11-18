@@ -1924,30 +1924,38 @@ def dsec(s):
 
 def sec4(s):
     base(s, page="44")
-    header(s, SEC_TAG, "三项服务：系统安全审查 · 代码安全审查 · AI 智能体监管",
-           "过去做的、现在做的、正在跑的，各有一道关")
-    items = [
-        ("现有系统", "系统安全审查", "交易、订单、资金类核心系统",
-         "按风险排序的问题清单，每条带重现步骤"),
-        ("上线前的新产出", "代码安全审查", "研发团队、外包商、业务自建的小工具",
-         "带病的东西挡在上线前，外包交付有统一口径"),
-        ("运行中的 AI 智能体", "AI 智能体监管", "知识库问答、智能客服、业务智能体",
-         "按权限取数的验收记录，高风险操作有人确认"),
+    header(s, SEC_TAG, "三项服务：查什么、覆盖到哪、交什么",
+           "每一项都写明查的范围和交出来的东西")
+    cols = [(36, 168, "服务"), (204, 302, "覆盖范围"), (506, 178, "产出物")]
+    for x, w, h in cols:
+        rect(s, x, 108, w, 24, fill=RED, line=RED)
+        txt(s, x + 8, 108, w - 16, 24, [P(h, 8.5, True, WHITE)], anchor="m")
+    rows = [
+        ("现有系统", "系统安全审查",
+         "业务规则：用自己的账号看别人的单、跳过付款、重复退款；普通账号调用管理功能；状态与金额等字段可被改",
+         "问题清单（每条带重现步骤）· 已测与未覆盖说明 · 修复建议"),
+        ("上线前", "代码安全审查",
+         "AI 写的与外包交付的代码：漏权限检查、第三方零件漏洞、写死的密码；同事自建的小工具：谁能打开、连了哪些数据、会不会外传；对外内容（可选）：敏感信息、引证、标注",
+         "上线门禁结论 · 问题清单与修复建议 · 外包交付的验收口径"),
+        ("运行中", "AI 智能体监管",
+         "取数按当前用户权限，越界请求拦下；付款、删除、审批须授权人确认；诱导指令识别与敏感打码；提问与操作留痕",
+         "权限与确认清单 · 审计事件 · 每月运行报告"),
     ]
-    for i, (stage, name, scene, deliver) in enumerate(items):
-        x = 36 + i * 221
-        rect(s, x, 112, 206, 150, fill=WHITE if i == 1 else CARD, line=BORDER)
-        rect(s, x, 112, 206, 3, fill=RED)
-        txt(s, x + 14, 124, 178, 13, [P(stage, 7.5, False, LIGHT)])
-        txt(s, x + 14, 139, 178, 20, [P(name, 12, True, DARK)])
-        txt(s, x + 14, 168, 178, 36, [P("典型场景：" + scene, 8, False, MID, ls=1.2)])
-        rect(s, x + 14, 200, 178, 1, fill=BORDER)
-        txt(s, x + 14, 210, 178, 40, [P("拿到什么：" + deliver, 8.5, True, DARK, ls=1.2)])
-    txt(s, 36, 278, 648, 16,
-        [P("共用底座：系统与权限梳理 · 统一问题清单与风险分级 · AI 模型接入（外部或内部），加第二项不用重做",
-           8, False, MID)])
-    txt(s, 36, 306, 648, 20,
-        [P("三项都能单独采购，也能叠在一起做；各自怎么做，见后三页。", 9.5, True, RED)])
+    y = 132
+    for i, (stage, name, scope, out) in enumerate(rows):
+        h = 72 if i < 2 else 62
+        fill = CARD if i % 2 == 0 else WHITE
+        rect(s, 36, y, 168, h, fill=fill, line=BORDER)
+        txt(s, 46, y + 10, 148, 13, [P(stage, 7, False, LIGHT)])
+        txt(s, 46, y + 24, 148, 20, [P(name, 10.5, True, DARK)])
+        rect(s, 204, y, 302, h, fill=fill, line=BORDER)
+        txt(s, 214, y, 282, h, [P(scope, 8, False, DARK, ls=1.22)], anchor="m")
+        rect(s, 506, y, 178, h, fill=fill, line=BORDER)
+        txt(s, 516, y, 158, h, [P(out, 8, False, MID, ls=1.22)], anchor="m")
+        y += h + 2
+    txt(s, 36, 352, 648, 14,
+        [P("共用底座：系统与权限梳理 · 统一问题清单与风险分级 · AI 模型接入（外部或内部）",
+           7.5, False, MID)])
 
 
 def sec3(s):
