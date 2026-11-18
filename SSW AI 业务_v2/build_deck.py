@@ -2086,7 +2086,7 @@ def sec7(s):
 
 def sec11(s):
     base(s, page="48")
-    header(s, SEC_TAG + " · 部署方式", "装在哪、数据去哪：默认全部装在你的环境内",
+    header(s, SEC_TAG + " · 部署方式", "架构部署和系统环境",
            "三项服务都装在你的机房或云账号里，我方不托管你的数据")
     rect(s, 36, 104, 364, 236, fill=CARD, line=BORDER)
     txt(s, 48, 110, 340, 16, [P("你的环境内（机房或云账号）", 8.5, True, DARK)])
