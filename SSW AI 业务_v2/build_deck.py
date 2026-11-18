@@ -2120,7 +2120,7 @@ def sec7(s):
 
 def sec13(s):
     base(s, page="49")
-    header(s, SEC_TAG + " · 智能体监管规范", "所有 AI 请求，都先经过安全监管入口",
+    header(s, SEC_TAG + " · 智能体监管规范", "智能体安全监管流程",
            "员工和业务系统发出的每一次请求，先过一道关，再到模型")
     rect(s, 36, 108, 168, 78, fill=WHITE, line=BORDER)
     txt(s, 48, 120, 144, 16, [P("员工 / 业务系统", 9, True, DARK)])
